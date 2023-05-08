@@ -36,5 +36,5 @@ jobs:
       - name: Deploy
         uses: actions/upload-artifact@v3
         with:
-          name: note.js
+          name: note.js_${{runner.os}}
           path: out
