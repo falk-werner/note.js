@@ -1,0 +1,40 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Setup electron-forge
+        run: |
+          npm install --save-dev @electron-forge/cli
+
+      - name: Package
+        run: |
+          npx electron-forge import
+          npm run package
+
+      - name: Deploy
+        uses: actions/upload-artifact@v3
+        with:
+          name: note.js_${{runner.os}}
+          path: out
