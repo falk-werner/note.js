@@ -4,8 +4,18 @@
     <meta charset="UTF-8" />
     <title>note.js</title>
     <link rel="stylesheet" href="index.css" />
+    <script type="text/javascript">
+      async function startup() {
+        const notes = await note.list();
+        for(let name of notes) {
+          console.log(name);
+          const contents = await note.read(name);
+          console.log(contents);
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body onload="startup()">
     <h1>note.js</h1>
     <p>... still under construction</p>
   </body>

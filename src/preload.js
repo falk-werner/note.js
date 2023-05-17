@@ -1,2 +1,6 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
+const { contextBridge, ipcRenderer } = require('electron')
+
+contextBridge.exposeInMainWorld('note', {
+    list: () => ipcRenderer.invoke('listNotes'),
+    read: (name) => ipcRenderer.invoke('readNote', name)
+});
