@@ -24,6 +24,10 @@ const createWindow = () => {
 app.on('ready', () => {
   ipcMain.handle('listNotes', note.list);
   ipcMain.handle('readNote', note.read);
+  ipcMain.handle('createNote', note.create);
+  ipcMain.handle('renameNote', note.rename);
+  ipcMain.handle('writeNote', note.write);
+  ipcMain.handle('removeNote', note.remove);
   createWindow();
 });
 

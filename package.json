@@ -11,14 +11,19 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": ["note"],
-  "contributors": [{
-    "name": "Falk Werner",
-    "url": "https://github.com/falk-werner"
-  }],
+  "keywords": [
+    "note"
+  ],
+  "contributors": [
+    {
+      "name": "Falk Werner",
+      "url": "https://github.com/falk-werner"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "yaml": "^2.3.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
