@@ -11,6 +11,10 @@ class Config {
         };
 
         this.config = {...default_config, ...this.#load_config()};
+
+        if (!fs.existsSync(this.note_path)) {
+            fs.mkdirSync(this.note_path, {recursive: true});
+        }
     }
 
     #load_config() {
