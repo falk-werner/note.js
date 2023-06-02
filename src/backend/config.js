@@ -7,7 +7,7 @@ class Config {
 
     constructor() {
         const default_config = {
-            base_path: "{home}/notes"
+            base_path: "{home}/.notes"
         };
 
         this.config = {...default_config, ...this.#load_config()};
@@ -40,7 +40,7 @@ class Config {
     }
 
     get note_path() {
-        return path.join(this.#base_path, "notes");
+        return this.#base_path;
     }
 
 }
