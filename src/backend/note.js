@@ -6,12 +6,16 @@ const { readFile } = require("node:fs/promises");
 
 const config = new Config();
 
+function get_note_path(name) {
+    return path.join(config.base_path, name);
+}
+
 function get_note_file(name) {
-    return path.join(config.note_path, name, "README.md");
+    return path.join(get_note_path(name), "README.md");
 }
 
 module.exports.list = async function() {
-    const files = fs.readdirSync(config.note_path);
+    const files = fs.readdirSync(config.base_path);
     const notes = [];
 
     for(let file of files) {
@@ -35,11 +39,11 @@ module.exports.read = async function(_, name) {
 module.exports.create = async function() {
     let id = 0;
     let name = "Untitled";
-    let note_path = path.join(config.note_path, name);
+    let note_path = get_note_path(name);
     while (fs.existsSync(note_path)) {
         id++;
         name = `Untitled ${id}`;
-        note_path = path.join(config.note_path, name)
+        note_path = get_note_path(name);
     }
 
     fs.mkdirSync(note_path);
@@ -50,18 +54,18 @@ module.exports.create = async function() {
 };
 
 module.exports.rename = async function(_, old_name, new_name) {
-    const old_path = path.join(config.note_path, old_name);
-    const new_path = path.join(config.note_path, new_name);
+    const old_path = get_note_path(old_name);
+    const new_path = get_note_path(new_name);
 
     fs.renameSync(old_path, new_path);
 }
 
 module.exports.write = async function(_, name, contents) {
-    const readme = path.join(config.note_path, name, "README.md");
+    const readme = get_note_file(name);
     fs.writeFileSync(readme, contents, { encoding: 'utf-8'});
 }
 
 module.exports.remove = async function(_, name) {
-    note_path = path.join(config.note_path, name);
+    note_path = get_note_path(name);
     fs.rmSync(note_path, {force: true, recursive: true});
 }

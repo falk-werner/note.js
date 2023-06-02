@@ -12,8 +12,8 @@ class Config {
 
         this.config = {...default_config, ...this.#load_config()};
 
-        if (!fs.existsSync(this.note_path)) {
-            fs.mkdirSync(this.note_path, {recursive: true});
+        if (!fs.existsSync(this.base_path)) {
+            fs.mkdirSync(this.base_path, {recursive: true});
         }
     }
 
@@ -30,17 +30,13 @@ class Config {
         }
     }
 
-    get #base_path() {
+    get base_path() {
         const template = this.config.base_path;
         const homedir = os.homedir();
         const base_path = template.replaceAll("{home}", homedir);
 
         return base_path;
 
-    }
-
-    get note_path() {
-        return this.#base_path;
     }
 
 }
