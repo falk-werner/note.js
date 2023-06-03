@@ -4,121 +4,24 @@
     <meta charset="UTF-8" />
     <title>note.js</title>
     <link rel="stylesheet" href="index.css" />
-    <script type="text/javascript">
-
-      let id = 0;
-
-      async function startup() {
-        const add_button = document.querySelector("#add");
-        add_button.addEventListener('click', add_new, false);
-
-        const update_button = document.querySelector("#update");
-        update_button.addEventListener('click', update, false);
-
-        update();
-      }
-
-      async function update() {
-        const stage = document.querySelector("#stage");
-        stage.innerHTML = '';
-
-        const notes = await note.list();
-        for(let name of notes) {
-            add(name);
-        }
-
-      }
-
-      async function add_new() {
-        const name = await note.create();
-        add(name);
-      }
-
-      async function add(name) {
-        const stage = document.querySelector("#stage");
-        const note_id = ++id;
-
-        const container = document.createElement("div");
-        container.id = `container_${note_id}`;
-        stage.appendChild(container);
-
-        const title = document.createElement('input');
-        title.value = name;
-        title.type = "text";
-        title.id = `title_${note_id}`;
-        title.setAttribute('data-title', name);
-        container.appendChild(title);
-
-        const change_title = document.createElement('input');
-        change_title.value = "Change";
-        change_title.type = "button";
-        change_title.addEventListener('click', () => { rename(note_id)}, false);
-        container.appendChild(change_title);
-
-        const contents = document.createElement('textarea');
-        contents.value = await note.read(name);
-        contents.id = `contents_${note_id}`;
-        container.appendChild(contents);
-
-        const update = document.createElement('input');
-        update.value = "Update";
-        update.type = "button";
-        update.addEventListener('click', () => { write(note_id); }, false);
-        container.appendChild(update);
-
-        const remove = document.createElement('input');
-        remove.value = "Remove";
-        remove.type = "button";
-        remove.addEventListener('click', () => { removeNote(note_id); }, false);
-        container.appendChild(remove);
-
-        container.appendChild(document.createElement("hr"));
-
-      }
-
-      async function rename(id) {
-        const title = document.querySelector(`#title_${id}`);
-        const old_name = title.getAttribute('data-title');
-        const new_name = title.value;
-
-        await note.rename(old_name, new_name);
-        update_note(id, new_name);
-      }
-
-      async function update_note(id, name) {
-        const title = document.querySelector(`#title_${id}`);
-        title.setAttribute('data-title', name);
-        title.value = name;
-
-        const contents = document.querySelector(`#contents_${id}`);
-        contents.value = await note.read(name);
-      }
-
-      async function write(id) {
-        const title = document.querySelector(`#title_${id}`);
-        const contents = document.querySelector(`#contents_${id}`);
-        note.write(title.value, contents.value);
-      }
-
-      async function removeNote(id) {
-        const title = document.querySelector(`#title_${id}`);
-        await note.remove(title.value);
-
-        const stage = document.querySelector("#stage");
-        const container = document.querySelector(`#container_${id}`);
-        stage.removeChild(container);
-      }
-
-    </script>
+    <link rel="stylesheet" href="extern/simplemde/simplemde.min.css" />
+    <link rel="stylesheet" href="extern/fontawesome/css/font-awesome.min.css" />
+    <script type="text/javascript" src="extern/simplemde/simplemde.min.js"></script>
+    <script type="module" src="frontend/main.js"></script>
   </head>
-  <body onload="startup()">
-    <h1>Actions</h1>
-    <div>
-      <input id="add" type="button" value="Add" />
-      <input id="update" type="button" value="Update" />
-    </div>
+  <body>
+    <div class="wrapper">
+      <div id="sidebar">
+        <input id="add" type="button" value="Add" />
+        <input id="update" type="button" value="Update" />
+        <hr>
+        <ul id="notelist"></ul>
+      </div>
+      <div id="slider" data-slider-target="sidebar" class="slider"></div>
 
-    <h1>Notes</h1>
-    <div id="stage"></div>
+      <div class="content">
+        <textarea id="editor"></textarea>
+      </div>
+    </div>
   </body>
 </html>
