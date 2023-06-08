@@ -1,39 +1,48 @@
+import { Note } from './note.js'
+
 class NoteList {
 
-    constructor(element, editor) {
-        this.element = element;
-        this.active_item = null;
-        this.editor = editor;
+    #element;
+    #active_note;
+    #content;
+
+    constructor(element, content) {
+        this.#element = element;
+        this.#active_note = null;
+        this.#content = content;
         this.update();
     }
 
     async update() {
-        this.element.innerHTML = '';
+        this.#element.innerHTML = '';
 
         const notes = await note.list();
-        for(const note of notes) {
-            this.add(note);
+        for(const name of notes) {
+            await this.add(name);
         }
     }
 
-    add(name) {
-        const item = document.createElement('li');
-        this.element.appendChild(item);
+    get element() {
+        return this.#element;
+    }
 
-        const link = document.createElement('a');
-        item.appendChild(link);
-        link.textContent = name;
-        link.href = '#';
-        link.addEventListener('click', async() => {
-            const content = await note.read(name);
-            this.editor.value(content);
-            if (this.active_item !== null) {
-                this.active_item.classList.remove('active');
-            }
-            this.active_item = link;
-            this.active_item.classList.add('active');
-        }, false);
+    activate(note) {
+        let isPreviewActive = true;
+        if (this.#active_note) {
+            this.#active_note.deactivate();
+            isPreviewActive = this.#active_note.isPreviewActive;
+        }
 
+        this.#active_note = note;
+        this.#active_note.activate(isPreviewActive);
+    }
+
+    async add(name) {
+        const text = await note.read(name);
+        const new_note = new Note(name, text, this, this.#content);
+        if (!this.#active_note) {
+            this.activate(new_note);
+        }
     }
 
 }
