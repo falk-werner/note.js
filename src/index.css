@@ -42,5 +42,11 @@ body {
 }
 
 #notelist a:link.active {
-  color: red;
+  font-weight: bold;
 }
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
