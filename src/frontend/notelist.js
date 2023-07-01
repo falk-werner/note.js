@@ -5,6 +5,7 @@ class NoteList {
     #element;
     #active_note;
     #content;
+    #notes;
 
     constructor(element, content) {
         this.#element = element;
@@ -15,6 +16,7 @@ class NoteList {
 
     async update() {
         this.#element.innerHTML = '';
+        this.#notes = {};
 
         const notes = await note.list();
         for(const name of notes) {
@@ -40,8 +42,23 @@ class NoteList {
     async add(name) {
         const text = await note.read(name);
         const new_note = new Note(name, text, this, this.#content);
+        this.#notes[name] = new_note;
         if (!this.#active_note) {
             this.activate(new_note);
+        }
+    }
+
+    async remove(item) {
+        await note.remove(item.name);
+        delete this.#notes[item.name];
+        item.remove();
+
+        if (this.#active_note == item) {
+            this.#active_note = null;            
+            const keys = Object.keys(this.#notes);
+            if (keys.length > 0) {
+                this.activate(this.#notes[keys[0]]);
+            }    
         }
     }
 
