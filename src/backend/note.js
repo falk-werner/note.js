@@ -49,9 +49,14 @@ module.exports.create = async function() {
     fs.mkdirSync(note_path);
     const readme = path.join(note_path, "README.md");
     fs.writeFileSync(readme, `# ${name}`, { encoding: 'utf-8'});
-
+    
     return name;
 };
+
+module.exports.save = async function(_, name, text) {
+    const note = get_note_file(name);
+    fs.writeFileSync(note, text, { encoding: 'utf-8'});
+}
 
 module.exports.rename = async function(_, old_name, new_name) {
     const old_path = get_note_path(old_name);

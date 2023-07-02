@@ -104,6 +104,13 @@ class Note {
                 className: "fa fa-table",
                 title: "Insert Table"
             }, "|", {
+                name: "save",
+                action: () => { 
+                    notelist.save(this, this.#editor.value());
+                },
+                className: "fa fa-trash no-disable",
+                title: "Save Note"
+            }, {
                 name: "remove",
                 action: () => { 
                     notelist.remove(this); 
