@@ -48,6 +48,10 @@ class NoteList {
         }
     }
 
+    async save(item, text) {
+        note.save(item.name, text);
+    }
+
     async remove(item) {
         await note.remove(item.name);
         delete this.#notes[item.name];
