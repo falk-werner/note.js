@@ -27,7 +27,7 @@ class Note {
         }, false);
     }
 
-    #toggle_and_save(notelist) {
+    #toggle_preview(notelist) {
         notelist.save(this, this.#editor.value());
         this.#editor.togglePreview();
     }
@@ -45,7 +45,7 @@ class Note {
             toolbar: [{
                 name: "preview",
                 action: () => {
-                    this.#toggle_and_save(notelist);
+                    this.#toggle_preview(notelist);
                 },
                 className: "fa fa-eye no-disable",
                 title: "Toggle Preview"
