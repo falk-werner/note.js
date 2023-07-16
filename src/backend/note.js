@@ -52,11 +52,6 @@ module.exports.create = async function() {
     return name;
 };
 
-module.exports.save = async function(_, name, text) {
-    const note = get_note_file(name);
-    fs.writeFileSync(note, text, { encoding: 'utf-8'});
-}
-
 module.exports.rename = async function(_, old_name, new_name) {
     const old_path = get_note_path(old_name);
     const new_path = get_note_path(new_name);
