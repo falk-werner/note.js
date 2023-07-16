@@ -49,7 +49,7 @@ class NoteList {
     }
 
     async save(item, text) {
-        note.save(item.name, text);
+        note.write(item.name, text);
     }
 
     async remove(item) {
