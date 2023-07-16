@@ -108,7 +108,7 @@ class Note {
                 action: () => { 
                     notelist.save(this, this.#editor.value());
                 },
-                className: "fa fa-trash no-disable",
+                className: "fa fa-floppy-o no-disable",
                 title: "Save Note"
             }, {
                 name: "remove",
