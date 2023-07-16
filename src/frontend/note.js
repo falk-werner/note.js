@@ -27,6 +27,11 @@ class Note {
         }, false);
     }
 
+    #toggle_and_save(notelist) {
+        notelist.save(this, this.#editor.value());
+        this.#editor.togglePreview();
+    }
+
 
     #create_editor(notelist, content, text) {
         this.#editor_element = document.createElement('div');
@@ -39,7 +44,9 @@ class Note {
             autoDownloadFontAwesome: false,
             toolbar: [{
                 name: "preview",
-                action: SimpleMDE.togglePreview,
+                action: () => {
+                    this.#toggle_and_save(notelist);
+                },
                 className: "fa fa-eye no-disable",
                 title: "Toggle Preview"
             }, {
