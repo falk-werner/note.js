@@ -140,6 +140,10 @@ class Note {
         return this.#name;
     }
 
+    set name(name) {
+        this.#name = name;
+    }
+
     activate(previewActive) {
         this.#link.classList.add('active');
 

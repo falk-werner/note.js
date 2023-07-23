@@ -49,6 +49,18 @@ class NoteList {
     }
 
     async save(item, text) {
+        const lines = text.split("\n");
+        for(const line of lines) {
+            if(line.startsWith("#")) {
+                const new_name = line.replaceAll("#", "").trim();
+                if(new_name != item.name) {
+                    await note.rename(item.name, new_name);
+                    item.name = new_name;
+                    this.update();
+                }
+                break;
+            }
+        }
         note.write(item.name, text);
     }
 
