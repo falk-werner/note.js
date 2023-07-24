@@ -14,6 +14,13 @@ function get_note_file(name) {
     return path.join(get_note_path(name), "README.md");
 }
 
+function check_filename(name) {
+    const invalid_chars = ['<','>',':','/','\\','|','?','*'];
+    if (invalid_chars.some(c => name.includes(c))) {
+        throw new Error(`invalid file name: the following characters are not allowed ${invalid_chars.join(',')}`);
+    }
+}
+
 module.exports.list = async function() {
     const files = fs.readdirSync(config.base_path);
     const notes = [];
@@ -53,6 +60,8 @@ module.exports.create = async function() {
 };
 
 module.exports.rename = async function(_, old_name, new_name) {
+    check_filename(new_name);
+
     const old_path = get_note_path(old_name);
     const new_path = get_note_path(new_name);
 
