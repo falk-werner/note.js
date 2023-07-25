@@ -1,5 +1,17 @@
 import { Note } from './note.js'
 
+function get_name(text, default_value) {
+    const lines = text.split("\n");
+    for(const line of lines) {
+        if(line.startsWith("#")) {
+            const name = line.replaceAll(/[#<>:\\\/\|\?\*]/g, "").trim();
+            return name;
+        }
+    }
+
+    return default_value;
+}
+
 class NoteList {
 
     #element;
@@ -49,17 +61,11 @@ class NoteList {
     }
 
     async save(item, text) {
-        const lines = text.split("\n");
-        for(const line of lines) {
-            if(line.startsWith("#")) {
-                const new_name = line.replaceAll("#", "").trim();
-                if(new_name != item.name) {
-                    await note.rename(item.name, new_name);
-                    item.name = new_name;
-                    this.update();
-                }
-                break;
-            }
+        const new_name = get_name(text, item.name);
+        if (new_name != item.name) {
+            await note.rename(item.name, new_name);
+            item.name = new_name;
+            this.update();
         }
         note.write(item.name, text);
     }
