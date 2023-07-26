@@ -1,6 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, protocol } = require('electron');
 const path = require('path');
 const note = require('./backend/note');
+const { Config } = require("./backend/config");
+
+const config = new Config();
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -22,6 +25,18 @@ const createWindow = () => {
 };
 
 app.on('ready', () => {
+  protocol.registerFileProtocol('local', (req, callback) => {
+    const relative_path = req.url.substring('local://'.length);
+    const full_path = path.resolve(`${config.base_path}/${relative_path}`);
+    console.log(full_path);
+    if (full_path.startsWith(config.base_path)) {
+      callback({ path: full_path});
+    }
+    else {
+      console.warn(`prevented possible path traversal: ${full_path}`);
+      callback({statusCode: 404});
+    }
+  });
   ipcMain.handle('listNotes', note.list);
   ipcMain.handle('readNote', note.read);
   ipcMain.handle('createNote', note.create);

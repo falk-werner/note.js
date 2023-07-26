@@ -1,4 +1,6 @@
 
+import { render } from './markdown_renderer.js'
+
 class Note {
 
     #name;
@@ -42,6 +44,7 @@ class Note {
         this.#editor = new SimpleMDE({
             element: textarea,
             autoDownloadFontAwesome: false,
+            previewRender: (plainText) => { return render(this.#name, plainText); },
             toolbar: [{
                 name: "preview",
                 action: () => {
