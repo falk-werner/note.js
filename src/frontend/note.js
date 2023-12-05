@@ -174,6 +174,16 @@ class Note {
         this.#editor_element.classList.add('hidden');
     }
 
+    filter(value) {
+        if ((this.#name.includes(value)) || (
+            this.#editor.value().includes(value))) {
+            this.#list_item.classList.remove('hidden');
+        }
+        else {
+            this.#list_item.classList.add('hidden');
+        }
+    }
+
 }
 
 
