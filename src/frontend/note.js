@@ -175,8 +175,8 @@ class Note {
     }
 
     filter(value) {
-        if ((this.#name.includes(value)) || (
-            this.#editor.value().includes(value))) {
+        if ((this.#name.toLowerCase().includes(value.toLowerCase())) || (
+            this.#editor.value().toLowerCase().includes(value.toLowerCase()))) {
             this.#list_item.classList.remove('hidden');
         }
         else {
