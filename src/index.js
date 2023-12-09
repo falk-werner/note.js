@@ -28,7 +28,6 @@ app.on('ready', () => {
   protocol.registerFileProtocol('local', (req, callback) => {
     const relative_path = req.url.substring('local://'.length);
     const full_path = path.resolve(`${config.base_path}/${relative_path}`);
-    console.log(full_path);
     if (full_path.startsWith(config.base_path)) {
       callback({ path: full_path});
     }
