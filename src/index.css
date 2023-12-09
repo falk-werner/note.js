@@ -30,6 +30,18 @@ body {
 
 .content {
   flex: 4 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.CodeMirror {
+  flex: 1;
 }
 
 #notelist {
@@ -46,7 +58,7 @@ body {
 }
 
 .hidden {
-  display: none;
+  display: none!important;
   visibility: hidden;
 }
 
