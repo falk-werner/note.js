@@ -84,6 +84,12 @@ class NoteList {
         }
     }
 
+    filter(value) {
+        for(let note of Object.values(this.#notes)) {
+            note.filter(value);
+        }
+    }
+
 }
 
 export { NoteList };

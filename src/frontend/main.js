@@ -13,6 +13,11 @@ const main = function() {
         notelist.add(name);
     }, false);
 
+    document.querySelector("#filter").addEventListener('input', () => {
+        const filter = document.querySelector('#filter').value;
+        notelist.filter(filter);
+    });
+
 };
 
 addEventListener("DOMContentLoaded", main);
