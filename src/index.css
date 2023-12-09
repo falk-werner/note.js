@@ -57,6 +57,10 @@ body {
   font-weight: bold;
 }
 
+#notelist .toggle-edit {
+  float: right;
+}
+
 .hidden {
   display: none!important;
   visibility: hidden;

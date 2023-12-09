@@ -8,6 +8,8 @@ class Note {
     #editor_element;
     #editor;
     #link;
+    #toggleEdit;
+    #toolbar;
 
     constructor(name, text, notelist, content) {
         this.#name = name;
@@ -27,13 +29,30 @@ class Note {
         this.#link.addEventListener('click', async() => {
             notelist.activate(this);
         }, false);
+
+        this.#toggleEdit = document.createElement('a');
+        this.#list_item.appendChild(this.#toggleEdit);
+        this.#toggleEdit.href = '#';
+        this.#toggleEdit.className = 'toggle-edit fa fa-pencil hidden';
+        this.#toggleEdit.textContent = '';
+        this.#toggleEdit.addEventListener('click', () => {
+            this.#toggleEditMode(notelist);
+        }, false);
+
     }
 
-    #toggle_preview(notelist) {
-        notelist.save(this, this.#editor.value());
-        this.#editor.togglePreview();
-    }
+    #toggleEditMode(notelist) {
+        if (this.#toggleEdit.classList.contains('fa-pencil')) {
+            this.#toggleEdit.classList.replace('fa-pencil', 'fa-floppy-o');
+        }
+        else {
+            notelist.save(this, this.#editor.value());
+            this.#toggleEdit.classList.replace('fa-floppy-o', 'fa-pencil');
+        }
 
+        this.#toolbar.classList.toggle('hidden');
+        this.#editor.togglePreview(notelist);
+    }
 
     #create_editor(notelist, content, text) {
         this.#editor_element = document.createElement('div');
@@ -46,13 +65,6 @@ class Note {
             autoDownloadFontAwesome: false,
             previewRender: (plainText) => { return render(this.#name, plainText); },
             toolbar: [{
-                name: "preview",
-                action: () => {
-                    this.#toggle_preview(notelist);
-                },
-                className: "fa fa-eye no-disable",
-                title: "Toggle Preview"
-            }, {
                 name: "side-by-side",
                 action: SimpleMDE.toggleSideBySide,
                 className: "fa fa-columns no-disable no-mobile",
@@ -132,6 +144,10 @@ class Note {
 
         this.#editor.value(text);
         this.#editor.togglePreview();
+
+        this.#toolbar = this.#editor_element.querySelector(".editor-toolbar");
+        this.#toolbar.classList.add('hidden');
+
         this.#hide();
     }
 
@@ -149,6 +165,7 @@ class Note {
 
     activate(previewActive) {
         this.#link.classList.add('active');
+        this.#toggleEdit.classList.remove('hidden');
 
         if (previewActive != this.#editor.isPreviewActive()) {
             this.#editor.togglePreview();
@@ -163,6 +180,7 @@ class Note {
 
     deactivate() {
         this.#link.classList.remove('active');
+        this.#toggleEdit.classList.add('hidden');
         this.#hide();
     }
 
