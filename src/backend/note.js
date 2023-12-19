@@ -14,6 +14,10 @@ function get_note_file(name) {
     return path.join(get_note_path(name), "README.md");
 }
 
+function get_note_tagsfile(name) {
+    return path.join(get_note_path(name), "tags.txt");
+}
+
 function check_filename(name) {
     const invalid_chars = ['<','>',':','/','\\','|','?','*'];
     if (invalid_chars.some(c => name.includes(c))) {
@@ -76,4 +80,22 @@ module.exports.write = async function(_, name, contents) {
 module.exports.remove = async function(_, name) {
     note_path = get_note_path(name);
     fs.rmSync(note_path, {force: true, recursive: true});
+}
+
+module.exports.read_tags = async function(_, name) {
+    try {
+        const tags_file = get_note_tagsfile(name);
+        const contents = await readFile(tags_file, { encoding: 'utf8' });
+        const tags = contents.split("\n").filter(n => n);
+        return tags;
+    }
+    catch (ex) {
+        return [];
+    }
+}
+
+module.exports.write_tags = async function(_, name, tags) {
+    const tags_file = get_note_tagsfile(name);
+    const contents = tags.join('\n');
+    fs.writeFileSync(tags_file, contents, { encoding: 'utf-8'});
 }

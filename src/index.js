@@ -42,6 +42,8 @@ app.on('ready', () => {
   ipcMain.handle('renameNote', note.rename);
   ipcMain.handle('writeNote', note.write);
   ipcMain.handle('removeNote', note.remove);
+  ipcMain.handle('readTags', note.read_tags);
+  ipcMain.handle('writeTags', note.write_tags);
   createWindow();
 });
 
