@@ -18,11 +18,13 @@ class NoteList {
     #active_note;
     #content;
     #notes;
+    #change_listeners;
 
     constructor(element, content) {
         this.#element = element;
         this.#active_note = null;
         this.#content = content;
+        this.#change_listeners = [];
         this.update();
     }
 
@@ -59,6 +61,8 @@ class NoteList {
         if (!this.#active_note) {
             this.activate(new_note);
         }
+
+        this.#fire_change();
     }
 
     async save(item, text) {
@@ -70,6 +74,8 @@ class NoteList {
         }
         note.write(item.name, text);
         note.write_tags(item.name, item.tags);
+
+        this.#fire_change();
     }
 
     async remove(item) {
@@ -84,14 +90,25 @@ class NoteList {
                 this.activate(this.#notes[keys[0]]);
             }    
         }
+
+        this.#fire_change();
     }
 
-    filter(value) {
+    filter(value, tags) {
         for(let note of Object.values(this.#notes)) {
-            note.filter(value);
+            note.filter(value, tags);
         }
     }
 
+    add_change_listener(listener) {
+        this.#change_listeners.push(listener);
+    }
+
+    #fire_change() {
+        for(let listener of this.#change_listeners) {
+            listener();
+        }
+    }
 }
 
 export { NoteList };

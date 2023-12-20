@@ -87,7 +87,7 @@ module.exports.read_tags = async function(_, name) {
         const tags_file = get_note_tagsfile(name);
         const contents = await readFile(tags_file, { encoding: 'utf8' });
         const tags = contents.split("\n").filter(n => n);
-        return tags;
+        return tags.map(n => n.toLocaleLowerCase());
     }
     catch (ex) {
         return [];
