@@ -25,7 +25,6 @@ class Config {
             return yaml.parse(contents);
         }
         catch (ex) {
-            console.log(ex);
             return {};
         }
     }
