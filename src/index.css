@@ -103,3 +103,26 @@ body {
 .editor-toolbar {
   opacity: 1.0!important;
 }
+
+#taglist {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 5px;
+  gap: 5px;
+}
+
+#taglist a {
+  flex: none;
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  background-color: lightgray;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taglist a.active {
+  background-color: lightblue;
+}
