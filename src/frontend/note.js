@@ -10,12 +10,14 @@ class Note {
     #link;
     #toggleEdit;
     #toolbar;
+    #tags_container;
+    #tags;
 
-    constructor(name, text, notelist, content) {
+    constructor(name, text, tags, notelist, content) {
         this.#name = name;
         
         this.#create_listentry(notelist);
-        this.#create_editor(notelist, content, text);
+        this.#create_editor(notelist, content, text, tags);
     }
 
     #create_listentry(notelist) {
@@ -51,12 +53,25 @@ class Note {
         }
 
         this.#toolbar.classList.toggle('hidden');
+        this.#tags_container.classList.toggle('hidden');
         this.#editor.togglePreview(notelist);
     }
 
-    #create_editor(notelist, content, text) {
+    #create_editor(notelist, content, text, tags) {
         this.#editor_element = document.createElement('div');
         content.appendChild(this.#editor_element);
+
+        this.#tags_container = document.createElement('div');
+        this.#editor_element.appendChild(this.#tags_container);
+        this.#tags_container.classList.add('tags')
+
+        const tags_caption = document.createElement('span');
+        this.#tags_container.appendChild(tags_caption);
+        tags_caption.className = "fa fa-tags";
+
+        this.#tags = document.createElement('input');
+        this.#tags_container.appendChild(this.#tags);
+        this.#tags.value = tags.join(' ');
 
         const textarea = document.createElement('textarea');
         this.#editor_element.appendChild(textarea);
@@ -77,7 +92,7 @@ class Note {
             }, "|", {
                 name: "bold",
                 action: SimpleMDE.toggleBold,
-                className: "fa fa-bold",
+                className: "fa fa-bold no-disable",
                 title: "Bold"
             }, {
                 name: "italic",
@@ -147,6 +162,7 @@ class Note {
 
         this.#toolbar = this.#editor_element.querySelector(".editor-toolbar");
         this.#toolbar.classList.add('hidden');
+        this.#tags_container.classList.add('hidden');
 
         this.#hide();
     }
@@ -161,6 +177,10 @@ class Note {
 
     set name(name) {
         this.#name = name;
+    }
+
+    get tags() {
+        return this.#tags.value.split(' ');
     }
 
     activate(previewActive) {

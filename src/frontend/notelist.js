@@ -53,7 +53,8 @@ class NoteList {
 
     async add(name) {
         const text = await note.read(name);
-        const new_note = new Note(name, text, this, this.#content);
+        const tags = await note.read_tags(name);
+        const new_note = new Note(name, text, tags, this, this.#content);
         this.#notes[name] = new_note;
         if (!this.#active_note) {
             this.activate(new_note);
@@ -68,6 +69,7 @@ class NoteList {
             this.update();
         }
         note.write(item.name, text);
+        note.write_tags(item.name, item.tags);
     }
 
     async remove(item) {
