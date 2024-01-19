@@ -14,13 +14,15 @@ function get_name(text, default_value) {
 
 class NoteList {
 
+    #provider;
     #element;
     #active_note;
     #content;
     #notes;
     #change_listeners;
 
-    constructor(element, content) {
+    constructor(provider, element, content) {
+        this.#provider = provider;
         this.#element = element;
         this.#active_note = null;
         this.#content = content;
@@ -32,9 +34,9 @@ class NoteList {
         this.#element.innerHTML = '';
         this.#notes = {};
 
-        const notes = await note.list();
+        const notes = await this.#provider.list();
         for(const name of notes) {
-            await this.add(name);
+            await this.#add(name);
         }
     }
 
@@ -53,9 +55,14 @@ class NoteList {
         this.#active_note.activate(isPreviewActive);
     }
 
-    async add(name) {
-        const text = await note.read(name);
-        const tags = await note.read_tags(name);
+    async add_new() {
+        const name = await this.#provider.create();
+        this.#add(name);
+    }
+
+    async #add(name) {
+        const text = await this.#provider.read(name);
+        const tags = await this.#provider.read_tags(name);
         const new_note = new Note(name, text, tags, this, this.#content);
         this.#notes[name] = new_note;
         if (!this.#active_note) {
@@ -68,18 +75,18 @@ class NoteList {
     async save(item, text) {
         const new_name = get_name(text, item.name);
         if (new_name != item.name) {
-            await note.rename(item.name, new_name);
+            await this.#provider.rename(item.name, new_name);
             item.name = new_name;
             this.update();
         }
-        note.write(item.name, text);
-        note.write_tags(item.name, item.tags);
+        this.#provider.write(item.name, text);
+        this.#provider.write_tags(item.name, item.tags);
 
         this.#fire_change();
     }
 
     async remove(item) {
-        await note.remove(item.name);
+        await this.#provider.remove(item.name);
         delete this.#notes[item.name];
         item.remove();
 

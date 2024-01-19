@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld('note', {
+contextBridge.exposeInMainWorld('NodeNoteProvider', {
     list: () => ipcRenderer.invoke('listNotes'),
     read: (name) => ipcRenderer.invoke('readNote', name),
     create: () => ipcRenderer.invoke('createNote'),

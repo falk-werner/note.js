@@ -6,10 +6,12 @@ const main = function() {
     slider_attach(document.querySelector("#slider"));
 
     const notelist = new NoteList(
+        NodeNoteProvider,
         document.querySelector('#notelist'), 
         document.querySelector('#content'));
 
     const taglist = new TagList(
+        NodeNoteProvider,
         document.querySelector('#taglist'),
         () => {
             const filter = document.querySelector('#filter').value;
@@ -21,8 +23,7 @@ const main = function() {
     });
 
     document.querySelector('#add').addEventListener('click', async () => {
-        const name = await note.create();
-        notelist.add(name);
+        notelist.add_new();
     }, false);
 
     document.querySelector("#filter").addEventListener('input', () => {

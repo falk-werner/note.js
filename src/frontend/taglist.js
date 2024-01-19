@@ -1,10 +1,12 @@
 class TagList
 {
+    #provider;
     #element;
     #tags;
     #on_filter_changed;
 
-    constructor(element, on_filter_changed) {
+    constructor(provider, element, on_filter_changed) {
+        this.#provider = provider;
         this.#element = element;
         this.#on_filter_changed = on_filter_changed;
         this.#tags = { }
@@ -25,9 +27,9 @@ class TagList
         let added = false;
         const all_tags = {};
 
-        const notes = await note.list();
+        const notes = await this.#provider.list();
         for (const name of notes) {
-            const tags = await note.read_tags(name);
+            const tags = await this.#provider.read_tags(name);
             for (const tag of tags) {
                 if (tag in this.#tags) {
                     all_tags[tag] = this.#tags[tag];
