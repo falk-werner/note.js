@@ -1,3 +1,5 @@
+[![build](https://github.com/falk-werner/note.js/actions/workflows/build.yaml/badge.svg)](https://github.com/falk-werner/note.js/actions/workflows/build.yaml)
+
 # note.js
 
 [note.js](https://github.com/falk-werner/note.js) is yet another note taking app.  
